@@ -5,10 +5,14 @@
   "license": "MIT",
   "scripts": {
     "start": "node app.js",
-    "test": "yarn jest"
+    "test": "jest",
+    "coverage": "jest --coverage"
   },
   "dependencies": {
     "express": "^4.17.1",
     "redis": "^3.0.2"
+  },
+  "devDependencies": {
+    "jest": "^26.6.3"
   }
 }
