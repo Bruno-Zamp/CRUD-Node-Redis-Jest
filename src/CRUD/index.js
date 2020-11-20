@@ -1,5 +1,6 @@
 const redis = require("redis");
 const client = redis.createClient();
+var async = require("async");
 
 client.on('connect', function() {
   console.log('Redis connected');
@@ -50,6 +51,24 @@ const crud = {
       else {
         resolve('error');
       }
+    });
+  },
+  async readAll() {
+    return new Promise((resolve, reject)=> {
+      client.keys('*', (err, keys) => {
+        if(err) reject(err);
+        if(keys) {
+          async.map(keys, (key, cb) => {
+            client.get(key, function (error, value) {
+                    if (error) return cb(error);
+                    cb(null, JSON.parse(value));
+                });
+          }, (error, results) => {
+               if (error) return console.log(error);
+               resolve({data:results});
+          });
+        }
+      });
     });
   },
   async remove(key) {
